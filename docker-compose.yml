@@ -16,6 +16,10 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+    environment:
+      - REDIS_HOST=redis
+      - OPTION_A=Porsche
+      - OPTION_B=Ferrari
     volumes:
      - ./vote:/usr/local/app
     ports:
@@ -28,6 +32,10 @@ services:
     build: ./result
     # use nodemon rather than node for local dev
     entrypoint: nodemon --inspect=0.0.0.0 server.js
+    environment:
+      - POSTGRES_HOST=db
+      - OPTION_A=Porsche
+      - OPTION_B=Ferrari
     depends_on:
       db:
         condition: service_healthy 
@@ -43,6 +51,11 @@ services:
   worker:
     build:
       context: ./worker
+    environment:
+      - POSTGRES_HOST=db
+      - REDIS_HOST=redis
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     depends_on:
       redis:
         condition: service_healthy 

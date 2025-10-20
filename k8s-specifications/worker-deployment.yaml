@@ -15,5 +15,10 @@ spec:
         app: worker
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_worker
+      - image: alterway/examplevotingapp_worker
         name: worker
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: postgres-credentials

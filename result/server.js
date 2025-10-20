@@ -8,6 +8,9 @@ var express = require('express'),
 
 var port = process.env.PORT || 4000;
 
+var optionA = process.env.OPTION_A || "Cats";
+var optionB = process.env.OPTION_B || "Dogs";
+
 io.on('connection', function (socket) {
 
   socket.emit('message', { text : 'Welcome!' });
@@ -17,8 +20,12 @@ io.on('connection', function (socket) {
   });
 });
 
+var pgUser = process.env.POSTGRES_USER || 'postgres';
+var pgPassword = process.env.POSTGRES_PASSWORD || 'postgres';
+var pgHost = process.env.POSTGRES_HOST || 'db';
+
 var pool = new Pool({
-  connectionString: 'postgres://postgres:postgres@db/postgres'
+  connectionString: `postgres://${pgUser}:${pgPassword}@${pgHost}/postgres`
 });
 
 async.retry(
@@ -66,6 +73,13 @@ function collectVotesFromResult(result) {
 app.use(cookieParser());
 app.use(express.urlencoded());
 app.use(express.static(__dirname + '/views'));
+
+app.get('/config', function (req, res) {
+  res.json({
+    optionA: optionA,
+    optionB: optionB
+  });
+});
 
 app.get('/', function (req, res) {
   res.sendFile(path.resolve(__dirname + '/views/index.html'));

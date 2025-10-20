@@ -4,9 +4,18 @@ var socket = io.connect();
 var bg1 = document.getElementById('background-stats-1');
 var bg2 = document.getElementById('background-stats-2');
 
-app.controller('statsCtrl', function($scope){
+app.controller('statsCtrl', function($scope, $http){
   $scope.aPercent = 50;
   $scope.bPercent = 50;
+  $scope.optionA = "Cats";
+  $scope.optionB = "Dogs";
+
+  $http.get("/config")
+    .then(function(response) {
+      $scope.optionA = response.data.optionA;
+      $scope.optionB = response.data.optionB;
+      document.title = response.data.optionA + " vs " + response.data.optionB + " -- Result";
+    });
 
   var updateScores = function(){
     socket.on('scores', function (json) {

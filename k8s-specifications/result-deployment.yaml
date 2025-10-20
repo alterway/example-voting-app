@@ -15,8 +15,13 @@ spec:
         app: result
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_result
+      - image: alterway/examplevotingapp_result
         name: result
         ports:
         - containerPort: 80
           name: result
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: postgres-credentials

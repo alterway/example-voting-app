@@ -30,7 +30,7 @@ docker stack deploy --compose-file docker-stack.yml vote
 
 ## Run the app in Kubernetes
 
-The folder k8s-specifications contains the YAML specifications of the Voting App's services.
+The folder k8s-specifications contains the YAML specifications of the Voting App's services. Before deploying, be sure to update the image names in the YAML files to use the `alterway/` prefix.
 
 Run the following command to create the deployments and services. Note it will create these resources in your current namespace (`default` if you haven't changed it.)
 
@@ -55,6 +55,19 @@ kubectl delete -f k8s-specifications/
 * A [.NET](/worker/) worker which consumes votes and stores them in…
 * A [Postgres](https://hub.docker.com/_/postgres/) database backed by a Docker volume
 * A [Node.js](/result) web app which shows the results of the voting in real time
+
+## Environment Variables
+
+The application can be configured using the following environment variables:
+
+| Variable | Description | Services |
+| --- | --- | --- |
+| `OPTION_A` | The first voting option. | `vote`, `result` |
+| `OPTION_B` | The second voting option. | `vote`, `result` |
+| `REDIS_HOST` | The hostname of the Redis service. | `vote`, `worker` |
+| `POSTGRES_HOST`| The hostname of the Postgres service. | `result`, `worker` |
+| `POSTGRES_USER`| The username for the Postgres database. | `result`, `worker` |
+| `POSTGRES_PASSWORD`| The password for the Postgres database. | `result`, `worker` |
 
 ## Notes
 
